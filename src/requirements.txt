@@ -1,0 +1,8 @@
+numpy
+pillow
+opencv-python-headless
+onnx
+onnxruntime
+torch
+psutil
+PySide6

@@ -1,0 +1,19 @@
+XOA CHU TRUYEN TRANH - DOC TRUOC KHI DUNG
+
+1. Bam doi XoaChuTruyenTranh.exe trong thu muc nay de mo app.
+   (Giu nguyen ca thu muc, dung chi chep rieng file exe ra cho khac.)
+2. Lan dau mo, app hoi tai mo hinh AI (khoang 290 MB, can mang, chi tai mot lan).
+3. Bam "Mo anh..." hoac keo tha anh vao cua so, roi bam "Xoa chu".
+   Ket qua tu luu vao thu muc Pictures\XoaChuTruyenTranh (ten file co duoi _clean.png).
+   App khong bao gio ghi de anh goc.
+4. Cho nao con sot chu: bat "Khoanh vung", khoanh quanh cho do, app tu xoa.
+
+Neu Windows hien "Windows protected your PC": bam More info -> Run anyway.
+
+Chi dung cho truyen tu ve hoac truyen ban co quyen chinh sua.
+
+Gap loi: chup man hinh va gui kem file
+  %LOCALAPPDATA%\XoaChuTruyenTranh\nhat-ky-loi.txt
+cho nguoi lam app.
+
+Ma nguon va giay phep (GPL-3.0): https://github.com/anhtm01042009-del/xoa-SFX-truyen-tranh

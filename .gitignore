@@ -1,0 +1,15 @@
+models/
+outputs/
+__pycache__/
+*.pyc
+.venv/
+venv/
+build/
+dist/
+*.zip
+*.lnk
+
+# Anh truyen cua nguoi khac: khong dua len repo cong khai
+samples/
+validation/*.png
+validation/*.jpg

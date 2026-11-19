@@ -1,0 +1,59 @@
+[
+  {
+    "file": "tay_20261110_233128_phan5_20261110_233129.png",
+    "size": [
+      804,
+      9633
+    ],
+    "tiles": 11,
+    "forced_cuts": 3,
+    "boxes": {
+      "flat": 10,
+      "lama": 1,
+      "lama_scaled": 0
+    },
+    "sec_total": 142.7,
+    "sec_detect": 141.2,
+    "sec_inpaint": 1.0,
+    "peak_ram_mb": 1531,
+    "output": "tay_20261110_233128_phan5_20261110_233129_clean.png"
+  },
+  {
+    "file": "tay_20261111_184329_phan11_20261111_184331.png",
+    "size": [
+      677,
+      16103
+    ],
+    "tiles": 17,
+    "forced_cuts": 8,
+    "boxes": {
+      "flat": 11,
+      "lama": 19,
+      "lama_scaled": 0
+    },
+    "sec_total": 189.3,
+    "sec_detect": 181.0,
+    "sec_inpaint": 7.7,
+    "peak_ram_mb": 1639,
+    "output": "tay_20261111_184329_phan11_20261111_184331_clean.png"
+  },
+  {
+    "file": "tay_20261111_183255_phan3_20261111_183255.png",
+    "size": [
+      645,
+      22857
+    ],
+    "tiles": 28,
+    "forced_cuts": 3,
+    "boxes": {
+      "flat": 53,
+      "lama": 26,
+      "lama_scaled": 0
+    },
+    "sec_total": 271.0,
+    "sec_detect": 260.7,
+    "sec_inpaint": 9.5,
+    "peak_ram_mb": 1668,
+    "output": "tay_20261111_183255_phan3_20261111_183255_clean.png"
+  }
+]

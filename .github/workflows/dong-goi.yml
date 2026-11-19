@@ -1,0 +1,88 @@
+# Dong goi app Xoa chu truyen tranh cho Windows bang PyInstaller (kieu thu muc, nen thanh 1 file zip).
+# - Moi lan day len nhanh main (co doi code/goi): tao file zip de tai thu (muc Actions > Artifacts).
+# - Khi tao ban phat hanh voi nhan phien ban (vd v0.1.0): file zip duoc dinh kem o muc Releases.
+# Mo hinh AI KHONG nam trong zip: app tu tai lan dau mo.
+name: Dong goi zip
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths:
+      - "src/**"
+      - "assets/**"
+      - "packaging/**"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dong-goi:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cai thu vien (torch ban CPU)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r packaging/requirements-dong-goi.txt
+
+      - name: Kiem tra ma nguon nap duoc
+        run: python packaging/kiem_tra_nap.py
+
+      - name: Dong goi
+        run: pyinstaller --noconfirm packaging/XoaChuTruyenTranh.spec
+
+      - name: Chay thu ban dong goi (tai mo hinh, xoa chu tren trang gia, khong mo cua so)
+        shell: pwsh
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          $p = Start-Process dist/XoaChuTruyenTranh/XoaChuTruyenTranh.exe -ArgumentList "--tu-kiem-tra","--day-du" -PassThru -Wait
+          if ($p.ExitCode -ne 0) {
+            Get-Content "$env:LOCALAPPDATA/XoaChuTruyenTranh/nhat-ky-loi.txt" -ErrorAction SilentlyContinue
+            Write-Error "Ban dong goi tu kiem tra loi (ma $($p.ExitCode))"; exit 1
+          }
+          Get-ChildItem "$env:LOCALAPPDATA/XoaChuTruyenTranh/models" | Format-Table Name, Length
+
+      - name: Nen zip
+        shell: pwsh
+        run: |
+          Copy-Item packaging/DOC-TRUOC.txt dist/XoaChuTruyenTranh/
+          7z a -tzip -mx=5 XoaChuTruyenTranh-windows.zip ./dist/XoaChuTruyenTranh
+          $f = Get-Item XoaChuTruyenTranh-windows.zip
+          "XoaChuTruyenTranh-windows.zip: {0:N0} MB" -f ($f.Length / 1MB)
+          $d = (Get-ChildItem dist/XoaChuTruyenTranh -Recurse | Measure-Object Length -Sum).Sum
+          "Sau khi giai nen: {0:N0} MB" -f ($d / 1MB)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: XoaChuTruyenTranh-windows
+          path: XoaChuTruyenTranh-windows.zip
+          compression-level: 0
+
+      - name: Tao ban phat hanh
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: XoaChuTruyenTranh-windows.zip
+          body: |
+            **Xóa chữ truyện tranh** — app Windows xóa chữ thoại và SFX trên trang truyện (kể cả trang dài), tự vá lại nền.
+
+            **Cách dùng:**
+            1. Tải `XoaChuTruyenTranh-windows.zip` bên dưới, giải nén (chuột phải → Extract All).
+            2. Mở thư mục vừa giải nén, bấm đúp `XoaChuTruyenTranh.exe`.
+            3. Lần đầu mở, app hỏi tải mô hình AI (khoảng 290 MB, cần mạng, chỉ tải một lần).
+
+            Nếu Windows hiện "Windows protected your PC": bấm **More info → Run anyway** (file chưa có chữ ký số).
+            Hướng dẫn đầy đủ: xem file `HUONG-DAN.md` trong repo.
+
+            Chỉ dùng cho truyện tự vẽ hoặc truyện bạn có quyền chỉnh sửa.
+            Đây là bản thử nghiệm. Gặp lỗi xin báo lại kèm ảnh chụp màn hình và file `nhat-ky-loi.txt` (app sẽ chỉ chỗ file này).
