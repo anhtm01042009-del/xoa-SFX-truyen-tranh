@@ -9,7 +9,7 @@ Chỉ thêm mục mới ở đầu danh sách, không sửa mục cũ.
 - Lỗi bất ngờ được ghi vào file `nhat-ky-loi.txt` và báo bằng hộp thoại, để người dùng gửi lại.
 - GitHub tự đóng gói app thành `XoaChuTruyenTranh-windows.zip` (giải nén là chạy, không cần cài Python); khi tạo bản phát hành, file zip được đính kèm.
 - Thêm hướng dẫn sử dụng cho người dùng, giấy phép GPL-3.0 và danh sách nguồn, giấy phép các mô hình và thư viện.
-- Chưa thử bản đóng gói trên máy Windows thật.
+- Lần đóng gói đầu tiên: file zip khoảng 261 MB, giải nén khoảng 752 MB, cộng khoảng 290 MB mô hình tải lần đầu. Đã tự kiểm tra trên máy Windows của GitHub (không có màn hình); chưa mở thử bằng tay trên máy Windows thật.
 
 ## 2026-11-11 (danh sách và lưu)
 - Khoanh vùng dùng được cả trên ảnh gốc lẫn ảnh kết quả; nút "Khoanh vùng" đổi màu và có dòng báo khi đang bật; lỗi hiện thành hộp thoại.
