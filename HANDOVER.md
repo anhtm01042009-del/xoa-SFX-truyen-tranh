@@ -1,10 +1,10 @@
 # HANDOVER
 
 ## Tóm tắt (cho em Minh Anh)
-Dự án đã lên GitHub (repo công khai) và GitHub tự đóng gói app thành `XoaChuTruyenTranh-windows.zip`, giống cách Chụp Nét đang làm. App giờ tự tải mô hình lần đầu mở, nên các bạn chỉ cần giải nén rồi bấm đúp exe. Lần đóng gói đầu trên Windows đã xanh: zip 261 MB, giải nén 752 MB (mô hình 286 MB tải riêng lần đầu). Cần em: (1) tạo bản phát hành `v0.1.0` trên web; (2) tải zip về thử trên một máy chưa cài Python rồi mới gửi các bạn; (3) bấm đúp `Noi Git.bat` một lần để nối thư mục trên máy với GitHub.
+Dự án đã lên GitHub (repo công khai) và GitHub tự đóng gói app thành `XoaChuTruyenTranh-windows.zip`, giống cách Chụp Nét đang làm. App giờ tự tải mô hình lần đầu mở, nên các bạn chỉ cần giải nén rồi bấm đúp exe. Lần đóng gói đầu trên Windows đã xanh: zip 261 MB, giải nén 752 MB (mô hình 286 MB tải riêng lần đầu). Em đã phát hành `v0.1.0` (2026-11-19) và thử bản zip trên máy em: em báo chạy ổn. Cần em: (1) gửi cho một bạn trước làm bản thử, ổn rồi mới gửi cả nhóm (link `releases/latest`); (2) bấm đúp `Noi Git.bat` một lần để nối thư mục trên máy với GitHub.
 
 ## Cập nhật
-- 2026-11-19. Bản 0.1.0 (chưa phát hành). Git: https://github.com/anhtm01042009-del/xoa-SFX-truyen-tranh (public), nhánh `main`. Thư mục trên máy em **chưa có `.git`**: agent đẩy code từ bản clone ở container rồi chép file sửa về máy em bằng `device_commit_files`.
+- 2026-11-19. Bản 0.1.0 đã phát hành (release `v0.1.0`, commit `a0962fb`, zip 261 MB). Em thử zip trên máy em (máy đã cài Python): chạy ổn; chưa thử trên máy sạch. Git: https://github.com/anhtm01042009-del/xoa-SFX-truyen-tranh (public), nhánh `main`. Thư mục trên máy em **chưa có `.git`**: agent đẩy code từ bản clone ở container rồi chép file sửa về máy em bằng `device_commit_files`.
 - GitHub Actions (windows-latest) lần đầu: xanh, gồm tự kiểm tra đầy đủ của bản đóng gói. Trên máy Claude (Linux): `packaging/kiem_tra_nap.py` đạt; app chạy từ mã nguồn tự tải mô hình rồi xóa chữ ảnh giả đạt; bản PyInstaller `--tu-kiem-tra --day-du` đạt (tải mô hình, tạo ctd_seg trong bản đóng gói, nhánh tô màu + LaMa đều chạy).
 
 ## Đã làm phiên này
@@ -20,7 +20,7 @@ Dự án đã lên GitHub (repo công khai) và GitHub tự đóng gói app thà
 
 ## Việc kế tiếp (tối đa 3)
 1. Nếu Actions đỏ ở lần sau, đọc log bước "Chay thu ban dong goi" (in nội dung `nhat-ky-loi.txt`).
-2. Em tạo release `v0.1.0`, thử zip trên máy sạch, ghi thời gian chạy và lỗi (nếu có) vào `validation\`.
+2. Ghi phản hồi của bạn đầu tiên (máy sạch): cài được không, thời gian chạy, lỗi (nếu có) vào `validation\`.
 3. Theo phản hồi của các bạn; cân nhắc bỏ torch (LaMa ONNX) nếu zip quá nặng.
 
 ## Đang chờ em quyết
