@@ -76,7 +76,7 @@ jobs:
           body_path: packaging/MO-TA-BAN-PHAT-HANH.md
 
   mac:
-    runs-on: macos-14   # chip Apple (arm64)
+    runs-on: macos-latest   # chip Apple (arm64)
     steps:
       - uses: actions/checkout@v4
 
