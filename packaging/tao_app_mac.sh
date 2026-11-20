@@ -8,11 +8,11 @@ VER=$(python -c "import sys; sys.path.insert(0,'src'); from phien_ban import __v
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-# File chay o Contents/MacOS; thu vien (_internal, nguyen khoi, khong tach) o Contents/Resources,
-# MacOS/_internal la lien ket sang do. codesign khong chap nhan thu muc *.dist-info nam trong MacOS.
+# File chay o Contents/MacOS; thu vien (_internal) chep NGUYEN KHOI vao Contents/Frameworks — bootloader PyInstaller
+# tim thu vien o day khi nam trong .app. Khong tach data sang Resources nhu BUNDLE (tach lam cv2 nap de quy loi).
+mkdir -p "$APP/Contents/Frameworks"
 cp "$SRC/XoaChuTruyenTranh" "$APP/Contents/MacOS/"
-cp -R "$SRC/_internal" "$APP/Contents/Resources/_internal"
-ln -s ../Resources/_internal "$APP/Contents/MacOS/_internal"
+cp -R "$SRC/_internal/." "$APP/Contents/Frameworks/"
 python - <<PY
 from PIL import Image
 Image.open("assets/icon.ico").save("$APP/Contents/Resources/icon.icns")
@@ -35,5 +35,11 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 </dict>
 </plist>
 PLIST
-codesign --force --sign - "$APP"
-codesign --verify --verbose=2 "$APP" && echo "Da dung va ky ad-hoc: $APP ($VER)"
+# Ky ad-hoc ca goi; neu codesign khong nhan cach xep nay thi giu chu ky ad-hoc san co cua tung file (PyInstaller da ky).
+if codesign --force --sign - "$APP" && codesign --verify --verbose=2 "$APP"; then
+  echo "Da dung va ky ad-hoc ca goi: $APP ($VER)"
+else
+  echo "::warning::Khong ky duoc ca goi .app; dung chu ky ad-hoc cua tung file ben trong"
+  codesign --force --sign - "$APP/Contents/MacOS/XoaChuTruyenTranh"
+  echo "Da dung: $APP ($VER)"
+fi
