@@ -8,7 +8,11 @@ VER=$(python -c "import sys; sys.path.insert(0,'src'); from phien_ban import __v
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp -R "$SRC/" "$APP/Contents/MacOS/"
+# File chay o Contents/MacOS; thu vien (_internal, nguyen khoi, khong tach) o Contents/Resources,
+# MacOS/_internal la lien ket sang do. codesign khong chap nhan thu muc *.dist-info nam trong MacOS.
+cp "$SRC/XoaChuTruyenTranh" "$APP/Contents/MacOS/"
+cp -R "$SRC/_internal" "$APP/Contents/Resources/_internal"
+ln -s ../Resources/_internal "$APP/Contents/MacOS/_internal"
 python - <<PY
 from PIL import Image
 Image.open("assets/icon.ico").save("$APP/Contents/Resources/icon.icns")
@@ -31,5 +35,5 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 </dict>
 </plist>
 PLIST
-codesign --force --deep --sign - "$APP"
-codesign --verify --deep --strict "$APP" && echo "Da dung va ky ad-hoc: $APP ($VER)"
+codesign --force --sign - "$APP"
+codesign --verify --verbose=2 "$APP" && echo "Da dung va ky ad-hoc: $APP ($VER)"
