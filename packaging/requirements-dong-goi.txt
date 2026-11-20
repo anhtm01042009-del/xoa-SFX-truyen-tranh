@@ -6,3 +6,4 @@ onnxruntime
 psutil
 PySide6
 pyinstaller
+certifi

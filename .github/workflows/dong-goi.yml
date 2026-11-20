@@ -44,6 +44,7 @@ jobs:
         shell: pwsh
         env:
           QT_QPA_PLATFORM: offscreen
+          SSL_CERT_FILE: C:/khong-co-chung-chi.pem   # gia lap may khong co chung chi cho OpenSSL
         run: |
           $p = Start-Process dist/XoaChuTruyenTranh/XoaChuTruyenTranh.exe -ArgumentList "--tu-kiem-tra","--day-du" -PassThru -Wait
           if ($p.ExitCode -ne 0) {
@@ -101,6 +102,10 @@ jobs:
       - name: Chay thu ban dong goi (tai mo hinh, xoa chu tren trang gia, khong mo cua so)
         env:
           QT_QPA_PLATFORM: offscreen
+          # Gia lap Mac cua nguoi dung: OpenSSL trong app khong thay chung chi nao (loi CERTIFICATE_VERIFY_FAILED
+          # 2026-11-20). App phai tu tai duoc nho certifi dong goi kem.
+          SSL_CERT_FILE: /khong-co-chung-chi.pem
+          SSL_CERT_DIR: /khong-co-thu-muc
         run: |
           DATA="$HOME/Library/Application Support/XoaChuTruyenTranh"
           if ! dist/XoaChuTruyenTranh.app/Contents/MacOS/XoaChuTruyenTranh --tu-kiem-tra --day-du; then

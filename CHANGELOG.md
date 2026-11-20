@@ -2,6 +2,10 @@
 
 Chỉ thêm mục mới ở đầu danh sách, không sửa mục cũ.
 
+## 2026-11-20 — Bản 0.1.2: sửa lỗi không tải được mô hình trên Mac
+- Sửa lỗi bản Mac báo "CERTIFICATE_VERIFY_FAILED" khi tải mô hình lần đầu: app nay mang theo bộ chứng chỉ bảo mật chuẩn (certifi), dùng kèm kho chứng chỉ của máy.
+- Bước tự kiểm tra khi đóng gói giờ chạy trong điều kiện máy không có sẵn chứng chỉ, để bắt lỗi kiểu này trước khi phát hành.
+
 ## 2026-11-20 — Bản 0.1.1: thêm bản Mac
 - Có thêm bản cho **Mac chip Apple (M1 trở lên)**: file `XoaChuTruyenTranh-mac.zip`, bên trong là `XoaChuTruyenTranh.app`. Mac chip Intel chưa hỗ trợ.
 - Trên Mac, mô hình và nhật ký lỗi lưu ở `~/Library/Application Support/XoaChuTruyenTranh`, kết quả ở thư mục Hình ảnh (Pictures)/XoaChuTruyenTranh.

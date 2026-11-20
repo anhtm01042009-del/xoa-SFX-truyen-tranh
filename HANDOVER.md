@@ -1,10 +1,11 @@
 # HANDOVER
 
 ## Tóm tắt (cho em Minh Anh)
-Bạn em dùng Mac (M1) nên không mở được file .exe. Chị đã thêm **bản Mac** (bản 0.1.1): GitHub giờ đóng gói ra cả `XoaChuTruyenTranh-windows.zip` và `XoaChuTruyenTranh-mac.zip`, cả hai đã tự kiểm tra đạt. Cần em: (1) tạo bản phát hành `v0.1.1` trên web (giống lần trước); (2) gửi bạn link `releases/latest`, nhắc bạn tải file **mac.zip** và làm theo phần "Cài trên Mac" (lần đầu phải bấm Vẫn mở trong Quyền riêng tư & Bảo mật); (3) bấm đúp `Noi Git.bat` khi rảnh.
+Bạn dùng Mac M1 đã mở được app (v0.1.1) nhưng không tải được mô hình (lỗi chứng chỉ bảo mật). Đã sửa ở **bản 0.1.2**: app mang theo bộ chứng chỉ riêng. Cần em: gửi bạn link `releases/latest` để tải lại **mac.zip** bản 0.1.2, kéo app mới vào Ứng dụng thay app cũ (có thể phải bấm Vẫn mở lần nữa); bấm đúp `Noi Git.bat` khi rảnh.
 
 ## Cập nhật
-- 2026-11-20. Bản 0.1.1 (chưa phát hành; `src/phien_ban.py` = 0.1.1). Git `main` tại commit thêm runtime hook cv2. Run Actions 44705818137: windows xanh (zip 253 MB), mac xanh (zip 263 MB, giải nén 845 MB, Signature=adhoc, tự kiểm tra đầy đủ đạt).
+- 2026-11-20. Bản 0.1.2 (`src/phien_ban.py` = 0.1.2): thêm certifi cho bước tải mô hình. v0.1.1 đã phát hành (2 zip); bạn Mac M1 mở được app, Gatekeeper qua được, lỗi tải mô hình do chứng chỉ.
+- Trước đó: bản 0.1.1 Git `main` tại commit thêm runtime hook cv2. Run Actions 44705818137: windows xanh (zip 253 MB), mac xanh (zip 263 MB, giải nén 845 MB, Signature=adhoc, tự kiểm tra đầy đủ đạt).
 - v0.1.0 (2026-11-19, chỉ Windows) đã phát hành; em thử trên máy em chạy ổn. Bạn đầu tiên dùng Mac M1 → mới có bản Mac.
 - Thư mục trên máy em vẫn **chưa có `.git`**: agent đẩy từ clone ở container, chép file về bằng `device_commit_files` (không ghi được `.github/`).
 
@@ -37,6 +38,7 @@ Bạn em dùng Mac (M1) nên không mở được file .exe. Chị đã thêm **
 - Kích thước mô hình dùng để kiểm: comictextdetector 94 669 756 byte, big-lama 205 669 692 byte. Nếu nguồn tải đổi file, app sẽ báo "tải không đủ".
 - Mac: KHÔNG tự dựng .app và KHÔNG chép `_internal` nguyên khối vào `Contents/Frameworks` (đã thử 2026-11-20: bootloader cần Frameworks, codesign từ chối thư mục `*.dist-info`/file dữ liệu ở đó). Dùng BUNDLE + runtime hook cv2. Biến `XOA_CV2_NAP_THANG=1` bật hook trên Linux/Windows để thử.
 - GitHub không còn máy `macos-14`; dùng `macos-latest`.
+- Tải mô hình phải dùng `tai_mo_hinh.ssl_context()` (kho máy + certifi); Python đóng gói trên Mac không thấy chứng chỉ của macOS. Máy GitHub có sẵn chứng chỉ nên tự kiểm tra đặt `SSL_CERT_FILE`/`SSL_CERT_DIR` giả để giả lập.
 - Torch PyPI trên Linux kèm CUDA (gói thử trên máy Claude 5,2 GB); Windows dùng index CPU: zip 261 MB, giải nén 752 MB (run 44558433135, 2026-11-19). Actions chạy ~5 phút.
 - Số "2" (số chương, Hàn) bị xóa dở khi chạy tự động: giữ bằng khoanh + Khôi phục. Khôi phục dùng ảnh gốc theo đường dẫn: gỡ/đổi tên ảnh gốc làm hỏng khôi phục.
 

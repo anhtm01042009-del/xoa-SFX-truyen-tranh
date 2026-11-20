@@ -5,6 +5,7 @@ Dung 2 cach:
   - Tu app: goi tai_tat_ca(thu_muc, tien_do, huy) — app goi khi lan dau mo ma chua co mo hinh.
 Tai ve file tam .part, du dung kich thuoc moi doi ten, nen mat mang giua chung khong de lai file hong.
 """
+import ssl
 import sys
 import urllib.request
 from pathlib import Path
@@ -25,6 +26,21 @@ SEG = "ctd_seg.onnx"
 TONG_BYTE = sum(size for _, size in FILES.values())
 
 
+def ssl_context():
+    """Kho chung chi cua may + bo chung chi certifi dong goi kem.
+
+    Python dong goi tren Mac khong tu dung kho chung chi cua macOS -> loi CERTIFICATE_VERIFY_FAILED
+    (may ban dung Mac M1, 2026-11-20). Giu kho cua may (Windows, mang co chung chi rieng) va them certifi.
+    """
+    ctx = ssl.create_default_context()
+    try:
+        import certifi
+        ctx.load_verify_locations(cafile=certifi.where())
+    except Exception:  # noqa: BLE001 - khong co certifi thi dung kho cua may
+        pass
+    return ctx
+
+
 class DaHuy(Exception):
     """Nguoi dung bam Huy khi dang tai."""
 
@@ -40,7 +56,7 @@ def _tai_mot(url, dst, size, da_tai_truoc, tien_do, huy):
     tmp = dst.with_suffix(dst.suffix + ".part")
     req = urllib.request.Request(url, headers={"User-Agent": "XoaChuTruyenTranh"})
     got = 0
-    with urllib.request.urlopen(req, timeout=60) as r, open(tmp, "wb") as f:
+    with urllib.request.urlopen(req, timeout=60, context=ssl_context()) as r, open(tmp, "wb") as f:
         while True:
             if huy and huy():
                 f.close()
