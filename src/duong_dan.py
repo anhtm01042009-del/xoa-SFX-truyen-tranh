@@ -1,8 +1,9 @@
 """Duong dan dung chung cho app.
 
 - Chay tu ma nguon (py src\\app.py): mo hinh o <du an>\\models, ket qua o <du an>\\outputs (nhu truoc).
-- Chay ban dong goi (XoaChuTruyenTranh.exe): mo hinh o %LOCALAPPDATA%\\XoaChuTruyenTranh\\models
-  (giu lai khi tai ban moi, khong phai tai lai), ket qua mac dinh o Pictures\\XoaChuTruyenTranh.
+- Chay ban dong goi: mo hinh o %LOCALAPPDATA%\\XoaChuTruyenTranh\\models (Windows) hoac
+  ~/Library/Application Support/XoaChuTruyenTranh/models (Mac) — giu lai khi tai ban moi;
+  ket qua mac dinh o Pictures/XoaChuTruyenTranh.
 """
 import os
 import sys
@@ -13,8 +14,12 @@ FROZEN = bool(getattr(sys, "frozen", False))
 
 if FROZEN:
     APP_DIR = Path(sys.executable).resolve().parent
-    _local = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
-    DATA_DIR = Path(_local) / APP_NAME
+    if sys.platform == "darwin":
+        # Mac: ~/Library/Application Support/XoaChuTruyenTranh (khong ghi vao trong goi .app)
+        DATA_DIR = Path.home() / "Library" / "Application Support" / APP_NAME
+    else:
+        _local = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
+        DATA_DIR = Path(_local) / APP_NAME
     MODELS_DIR = DATA_DIR / "models"
     OUTPUTS_DIR = Path.home() / "Pictures" / APP_NAME
 else:

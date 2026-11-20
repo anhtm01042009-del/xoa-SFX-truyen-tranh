@@ -1,6 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 # Dong goi kieu thu muc (onedir): khoi dong nhanh hon kieu 1 file vi khong phai giai nen torch moi lan mo.
 # Chay tu thu muc goc du an:  pyinstaller --noconfirm packaging/XoaChuTruyenTranh.spec
+import sys
 from pathlib import Path
 
 ROOT = Path(SPECPATH).parent
@@ -27,3 +28,21 @@ exe = EXE(
     icon=str(ROOT / "assets" / "icon.ico"),
 )
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="XoaChuTruyenTranh")
+
+if sys.platform == "darwin":
+    # Mac: goi thanh XoaChuTruyenTranh.app (PyInstaller tu doi icon.ico sang .icns nho Pillow).
+    sys.path.insert(0, str(ROOT / "src"))
+    from phien_ban import __version__
+    app = BUNDLE(
+        coll,
+        name="XoaChuTruyenTranh.app",
+        icon=str(ROOT / "assets" / "icon.ico"),
+        bundle_identifier="io.github.anhtm01042009-del.xoachutruyentranh",
+        version=__version__,
+        info_plist={
+            "CFBundleDisplayName": "Xóa chữ truyện tranh",
+            "CFBundleShortVersionString": __version__,
+            "NSHighResolutionCapable": True,
+            "LSMinimumSystemVersion": "12.0",
+        },
+    )

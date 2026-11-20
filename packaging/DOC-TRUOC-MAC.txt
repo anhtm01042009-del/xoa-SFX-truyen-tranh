@@ -1,0 +1,24 @@
+XOA CHU TRUYEN TRANH (ban Mac, chip Apple M1 tro len) - DOC TRUOC KHI DUNG
+
+1. Keo XoaChuTruyenTranh.app vao thu muc Ung dung (Applications).
+2. Bam doi de mo. Lan dau Mac se chan vi app chua co chu ky cua Apple:
+   - Bam Xong / OK o thong bao.
+   - Mo Cai dat he thong -> Quyen rieng tu & Bao mat, keo xuong duoi,
+     bam "Van mo" (Open Anyway) canh dong noi ve XoaChuTruyenTranh,
+     nhap mat khau may, roi bam Mo. Chi lam mot lan.
+   - Neu Mac bao app "bi hong" (damaged): mo Terminal, go dong sau roi Enter:
+       xattr -cr /Applications/XoaChuTruyenTranh.app
+     sau do mo lai app.
+3. Lan dau mo, app hoi tai mo hinh AI (khoang 290 MB, can mang, chi tai mot lan).
+4. Bam "Mo anh..." hoac keo tha anh vao cua so, roi bam "Xoa chu".
+   Ket qua tu luu vao thu muc Hinh anh (Pictures)/XoaChuTruyenTranh, ten co duoi _clean.png.
+   App khong bao gio ghi de anh goc.
+5. Cho nao con sot chu: bat "Khoanh vung", khoanh quanh cho do, app tu xoa.
+
+Chi dung cho truyen tu ve hoac truyen ban co quyen chinh sua.
+
+Gap loi: chup man hinh va gui kem file
+  ~/Library/Application Support/XoaChuTruyenTranh/nhat-ky-loi.txt
+(trong Finder: menu Di -> Di toi thu muc..., dan duong dan tren)
+
+Ma nguon va giay phep (GPL-3.0): https://github.com/anhtm01042009-del/xoa-SFX-truyen-tranh

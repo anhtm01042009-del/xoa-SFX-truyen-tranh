@@ -1,6 +1,6 @@
-# Dong goi app Xoa chu truyen tranh cho Windows bang PyInstaller (kieu thu muc, nen thanh 1 file zip).
+# Dong goi app Xoa chu truyen tranh bang PyInstaller cho Windows va Mac (chip Apple M1 tro len).
 # - Moi lan day len nhanh main (co doi code/goi): tao file zip de tai thu (muc Actions > Artifacts).
-# - Khi tao ban phat hanh voi nhan phien ban (vd v0.1.0): file zip duoc dinh kem o muc Releases.
+# - Khi tao ban phat hanh voi nhan phien ban (vd v0.1.1): ca hai file zip duoc dinh kem o muc Releases.
 # Mo hinh AI KHONG nam trong zip: app tu tai lan dau mo.
 name: Dong goi zip
 
@@ -19,7 +19,7 @@ permissions:
   contents: write
 
 jobs:
-  dong-goi:
+  windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,21 +68,64 @@ jobs:
           path: XoaChuTruyenTranh-windows.zip
           compression-level: 0
 
-      - name: Tao ban phat hanh
+      - name: Dinh kem vao ban phat hanh
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: XoaChuTruyenTranh-windows.zip
-          body: |
-            **Xóa chữ truyện tranh** — app Windows xóa chữ thoại và SFX trên trang truyện (kể cả trang dài), tự vá lại nền.
+          body_path: packaging/MO-TA-BAN-PHAT-HANH.md
 
-            **Cách dùng:**
-            1. Tải `XoaChuTruyenTranh-windows.zip` bên dưới, giải nén (chuột phải → Extract All).
-            2. Mở thư mục vừa giải nén, bấm đúp `XoaChuTruyenTranh.exe`.
-            3. Lần đầu mở, app hỏi tải mô hình AI (khoảng 290 MB, cần mạng, chỉ tải một lần).
+  mac:
+    runs-on: macos-14   # chip Apple (arm64)
+    steps:
+      - uses: actions/checkout@v4
 
-            Nếu Windows hiện "Windows protected your PC": bấm **More info → Run anyway** (file chưa có chữ ký số).
-            Hướng dẫn đầy đủ: xem file `HUONG-DAN.md` trong repo.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-            Chỉ dùng cho truyện tự vẽ hoặc truyện bạn có quyền chỉnh sửa.
-            Đây là bản thử nghiệm. Gặp lỗi xin báo lại kèm ảnh chụp màn hình và file `nhat-ky-loi.txt` (app sẽ chỉ chỗ file này).
+      - name: Cai thu vien
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch
+          pip install -r packaging/requirements-dong-goi.txt
+
+      - name: Kiem tra ma nguon nap duoc
+        run: python packaging/kiem_tra_nap.py
+
+      - name: Dong goi
+        run: pyinstaller --noconfirm packaging/XoaChuTruyenTranh.spec
+
+      - name: Chay thu ban dong goi (tai mo hinh, xoa chu tren trang gia, khong mo cua so)
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          DATA="$HOME/Library/Application Support/XoaChuTruyenTranh"
+          if ! dist/XoaChuTruyenTranh.app/Contents/MacOS/XoaChuTruyenTranh --tu-kiem-tra --day-du; then
+            cat "$DATA/nhat-ky-loi.txt" || true
+            echo "::error::Ban dong goi Mac tu kiem tra loi"; exit 1
+          fi
+          ls -l "$DATA/models"
+          codesign -dv dist/XoaChuTruyenTranh.app 2>&1 | head -5 || true
+
+      - name: Nen zip (giu lien ket ben trong app)
+        run: |
+          mkdir -p goi/XoaChuTruyenTranh
+          cp -R dist/XoaChuTruyenTranh.app goi/XoaChuTruyenTranh/
+          cp packaging/DOC-TRUOC-MAC.txt goi/XoaChuTruyenTranh/DOC-TRUOC.txt
+          ditto -c -k --sequesterRsrc --keepParent goi/XoaChuTruyenTranh XoaChuTruyenTranh-mac.zip
+          echo "XoaChuTruyenTranh-mac.zip: $(( $(stat -f%z XoaChuTruyenTranh-mac.zip) / 1048576 )) MB"
+          echo "Sau khi giai nen: $(du -sm goi/XoaChuTruyenTranh | cut -f1) MB"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: XoaChuTruyenTranh-mac
+          path: XoaChuTruyenTranh-mac.zip
+          compression-level: 0
+
+      - name: Dinh kem vao ban phat hanh
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: XoaChuTruyenTranh-mac.zip
+          body_path: packaging/MO-TA-BAN-PHAT-HANH.md
