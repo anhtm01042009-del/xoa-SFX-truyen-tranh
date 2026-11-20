@@ -96,7 +96,7 @@ jobs:
       - name: Dong goi
         run: |
           pyinstaller --noconfirm packaging/XoaChuTruyenTranh.spec
-          bash packaging/tao_app_mac.sh
+          codesign --verify --verbose=2 dist/XoaChuTruyenTranh.app
 
       - name: Chay thu ban dong goi (tai mo hinh, xoa chu tren trang gia, khong mo cua so)
         env:

@@ -1,6 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 # Dong goi kieu thu muc (onedir): khoi dong nhanh hon kieu 1 file vi khong phai giai nen torch moi lan mo.
 # Chay tu thu muc goc du an:  pyinstaller --noconfirm packaging/XoaChuTruyenTranh.spec
+import sys
 from pathlib import Path
 
 ROOT = Path(SPECPATH).parent
@@ -14,6 +15,7 @@ a = Analysis(
               "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets", "PySide6.Qt3DCore",
               "PySide6.QtMultimedia", "PySide6.QtQuick", "PySide6.QtQml", "PySide6.QtCharts",
               "PySide6.QtDataVisualization", "PySide6.QtPdf"],
+    runtime_hooks=[str(ROOT / "packaging" / "rthook_cv2_mac.py")],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
@@ -28,5 +30,23 @@ exe = EXE(
 )
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="XoaChuTruyenTranh")
 
-# Mac: KHONG dung BUNDLE cua PyInstaller (xep lai thu muc lam cv2 nap de quy loi, 2026-11-20).
-# Goi .app duoc dung tu thu muc onedir bang packaging/tao_app_mac.sh.
+
+if sys.platform == "darwin":
+    # Mac: goi thanh XoaChuTruyenTranh.app; PyInstaller tu ky ad-hoc va doi icon.ico sang .icns (nho Pillow).
+    # cv2 trong .app duoc nap thang boi packaging/rthook_cv2_mac.py.
+    sys.path.insert(0, str(ROOT / "src"))
+    from phien_ban import __version__
+    app = BUNDLE(
+        coll,
+        name="XoaChuTruyenTranh.app",
+        icon=str(ROOT / "assets" / "icon.ico"),
+        bundle_identifier="io.github.anhtm01042009-del.xoachutruyentranh",
+        version=__version__,
+        info_plist={
+            "CFBundleName": "XoaChuTruyenTranh",
+            "CFBundleDisplayName": "Xóa chữ truyện tranh",
+            "CFBundleShortVersionString": __version__,
+            "NSHighResolutionCapable": True,
+            "LSMinimumSystemVersion": "12.0",
+        },
+    )
