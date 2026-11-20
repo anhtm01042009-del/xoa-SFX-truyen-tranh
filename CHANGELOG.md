@@ -2,6 +2,14 @@
 
 Chỉ thêm mục mới ở đầu danh sách, không sửa mục cũ.
 
+## 2026-11-20 — Bản 0.1.1: thêm bản Mac
+- Có thêm bản cho **Mac chip Apple (M1 trở lên)**: file `XoaChuTruyenTranh-mac.zip`, bên trong là `XoaChuTruyenTranh.app`. Mac chip Intel chưa hỗ trợ.
+- Trên Mac, mô hình và nhật ký lỗi lưu ở `~/Library/Application Support/XoaChuTruyenTranh`, kết quả ở thư mục Hình ảnh (Pictures)/XoaChuTruyenTranh.
+- Hướng dẫn sử dụng có thêm phần cài và mở app lần đầu trên Mac (app chưa có chữ ký của Apple nên phải cho phép trong Quyền riêng tư & Bảo mật).
+- Trang phát hành ghi rõ file nào dành cho máy nào.
+- Bản đóng gói dùng OpenCV 4 (bản 5 mới ra chưa đóng gói được trên Mac). Bản Windows: zip khoảng 253 MB; bản Mac: zip khoảng 263 MB, giải nén khoảng 845 MB; cộng khoảng 290 MB mô hình tải lần đầu.
+- Cả hai bản đã tự kiểm tra trên máy của GitHub (không có màn hình); bản Mac chưa được mở thử bằng tay trên máy Mac thật.
+
 ## 2026-11-19 — Chuẩn bị bản 0.1.0 để chia sẻ
 - App có số phiên bản (0.1.0) trên thanh tiêu đề và biểu tượng riêng.
 - Lần đầu mở, nếu chưa có mô hình AI, app hỏi rồi tự tải (khoảng 290 MB, có thanh tiến độ, bấm Hủy được, kiểm đúng kích thước file). Không còn phải chạy `cai_dat.bat` mới có mô hình.

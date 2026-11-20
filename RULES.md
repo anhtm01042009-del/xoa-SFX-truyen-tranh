@@ -38,3 +38,5 @@ Chỉ thêm dòng mới ở cuối. Mâu thuẫn với dòng cũ thì hỏi em M
 - 2026-11-19 — Mỗi bản phát hành: đổi `src\phien_ban.py`, thêm dòng `CHANGELOG.md`, tag `vX.Y.Z` trùng số phiên bản, trỏ vào commit đã đóng gói xanh; em tải zip thử trên một máy chưa cài Python trước khi gửi rộng.
 - 2026-11-19 — Lõi `src\m0_clean.py` chỉ sửa khi có ca kiểm chứng; sửa xong chạy lại các ca trong `validation\`.
 - 2026-11-19 — Đã dùng git: cuối phiên `ban-giao` có thêm bước commit và push lên `main`.
+- 2026-11-20 — Phát hành cho Windows và Mac chip Apple (M1 trở lên); không hỗ trợ Mac chip Intel (torch không còn bản cho Mac Intel).
+- 2026-11-20 — Bản Mac đóng gói bằng BUNDLE của PyInstaller kèm `packaging/rthook_cv2_mac.py` (nạp thẳng lõi cv2); không tự dựng .app hay chép thư viện nguyên khối vào Frameworks (codesign từ chối). Khóa `opencv-python-headless<5` cho bản đóng gói cho tới khi thử lại được OpenCV 5.

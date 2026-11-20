@@ -23,3 +23,11 @@ Chỉ thêm. Độ chắc chắn: Đã kiểm chứng / Tra cứu / Giả địn
   **Đáp:** Được nhưng không nên: app dùng torch nên gói rất nặng, kiểu một file phải giải nén mỗi lần mở nên khởi động chậm. Chọn kiểu thư mục rồi nén zip; mô hình tải lần đầu mở. **Nguồn:** diễn đàn PyTorch và PyInstaller (người dùng báo torch đóng gói vài GB). **Độ chắc chắn:** Tra cứu; dung lượng thật của gói chưa đo.
 - **Hỏi:** License có buộc phải công khai mã nguồn không?
   **Đáp:** Mô hình comic-text-detector và repo manga-image-translator (nơi tải mô hình) ghi GPL-3.0; gửi app cho người khác là phát hành nên kèm mã nguồn theo GPL-3.0. Repo công khai là cách đơn giản nhất. (Ghi chú 2026-11-09 nói AGPL-3.0 theo trang manga-cleaner; repo gốc hiện ghi GPL-3.0.) **Nguồn:** trang GitHub/ecosyste.ms của hai repo. **Độ chắc chắn:** Tra cứu (không phải tư vấn pháp lý).
+
+## 2026-11-20
+- **Hỏi:** Bạn dùng Mac mở file .exe không được?
+  **Đáp:** .exe chỉ chạy trên Windows. Đã thêm bản Mac (chip Apple) đóng gói trên máy macOS của GitHub. Mac chip Intel không làm được vì torch đã ngừng phát hành bản cho Mac Intel. **Nguồn:** thử đóng gói trên GitHub Actions (macos-latest); torch trên PyPI chỉ có bản macosx arm64. **Độ chắc chắn:** Đã kiểm chứng (tự kiểm tra đạt), chưa mở tay trên Mac thật.
+- **Hỏi:** Vì sao bản Mac lỗi "recursion is detected during loading of cv2"?
+  **Đáp:** Khi PyInstaller xếp thành .app, gói cv2 bị tách phần dữ liệu (Contents/Resources) và phần nhị phân (Contents/Frameworks); bootstrap của cv2 nạp lại chính nó. Bản thư mục (không .app) chạy bình thường. Sửa bằng runtime hook nạp thẳng `cv2.abi3.so`. Hai cách khác thất bại: tự dựng .app (bootloader tìm thư viện ở Contents/Frameworks) và chép nguyên khối vào Frameworks (codesign từ chối thư mục `*.dist-info` và file dữ liệu). **Nguồn:** log GitHub Actions 2026-11-20. **Độ chắc chắn:** Đã kiểm chứng.
+- **Hỏi:** Máy macos-14 của GitHub còn dùng được không?
+  **Đáp:** Không: GitHub báo cấu hình macos-14 không còn hỗ trợ; dùng `macos-latest` (chip Apple). **Nguồn:** log Actions. **Độ chắc chắn:** Đã kiểm chứng.

@@ -1,27 +1,28 @@
 # HANDOVER
 
 ## Tóm tắt (cho em Minh Anh)
-Dự án đã lên GitHub (repo công khai) và GitHub tự đóng gói app thành `XoaChuTruyenTranh-windows.zip`, giống cách Chụp Nét đang làm. App giờ tự tải mô hình lần đầu mở, nên các bạn chỉ cần giải nén rồi bấm đúp exe. Lần đóng gói đầu trên Windows đã xanh: zip 261 MB, giải nén 752 MB (mô hình 286 MB tải riêng lần đầu). Em đã phát hành `v0.1.0` (2026-11-19) và thử bản zip trên máy em: em báo chạy ổn. Cần em: (1) gửi cho một bạn trước làm bản thử, ổn rồi mới gửi cả nhóm (link `releases/latest`); (2) bấm đúp `Noi Git.bat` một lần để nối thư mục trên máy với GitHub.
+Bạn em dùng Mac (M1) nên không mở được file .exe. Chị đã thêm **bản Mac** (bản 0.1.1): GitHub giờ đóng gói ra cả `XoaChuTruyenTranh-windows.zip` và `XoaChuTruyenTranh-mac.zip`, cả hai đã tự kiểm tra đạt. Cần em: (1) tạo bản phát hành `v0.1.1` trên web (giống lần trước); (2) gửi bạn link `releases/latest`, nhắc bạn tải file **mac.zip** và làm theo phần "Cài trên Mac" (lần đầu phải bấm Vẫn mở trong Quyền riêng tư & Bảo mật); (3) bấm đúp `Noi Git.bat` khi rảnh.
 
 ## Cập nhật
-- 2026-11-19. Bản 0.1.0 đã phát hành (release `v0.1.0`, commit `a0962fb`, zip 261 MB). Em thử zip trên máy em (máy đã cài Python): chạy ổn; chưa thử trên máy sạch. Git: https://github.com/anhtm01042009-del/xoa-SFX-truyen-tranh (public), nhánh `main`. Thư mục trên máy em **chưa có `.git`**: agent đẩy code từ bản clone ở container rồi chép file sửa về máy em bằng `device_commit_files`.
-- GitHub Actions (windows-latest) lần đầu: xanh, gồm tự kiểm tra đầy đủ của bản đóng gói. Trên máy Claude (Linux): `packaging/kiem_tra_nap.py` đạt; app chạy từ mã nguồn tự tải mô hình rồi xóa chữ ảnh giả đạt; bản PyInstaller `--tu-kiem-tra --day-du` đạt (tải mô hình, tạo ctd_seg trong bản đóng gói, nhánh tô màu + LaMa đều chạy).
+- 2026-11-20. Bản 0.1.1 (chưa phát hành; `src/phien_ban.py` = 0.1.1). Git `main` tại commit thêm runtime hook cv2. Run Actions 44705818137: windows xanh (zip 253 MB), mac xanh (zip 263 MB, giải nén 845 MB, Signature=adhoc, tự kiểm tra đầy đủ đạt).
+- v0.1.0 (2026-11-19, chỉ Windows) đã phát hành; em thử trên máy em chạy ổn. Bạn đầu tiên dùng Mac M1 → mới có bản Mac.
+- Thư mục trên máy em vẫn **chưa có `.git`**: agent đẩy từ clone ở container, chép file về bằng `device_commit_files` (không ghi được `.github/`).
 
 ## Đã làm phiên này
-- `src/duong_dan.py`: chạy từ mã nguồn giữ `models\`, `outputs\` như cũ; bản đóng gói dùng `%LOCALAPPDATA%\XoaChuTruyenTranh\models` và `Pictures\XoaChuTruyenTranh`.
-- `src/tai_mo_hinh.py`: hàm `tai_tat_ca` (file `.part`, kiểm đúng kích thước, hủy được), `da_du`; `make_seg_model.tao_seg` gọi trực tiếp (không mở tiến trình mới, vì trong bản đóng gói `sys.executable` là app).
-- `src/app.py`: hộp thoại tải mô hình lần đầu (có lời nhắc bản quyền), số phiên bản ở tiêu đề, biểu tượng, ghi lỗi vào `nhat-ky-loi.txt`, chế độ `--tu-kiem-tra [--day-du]` cho GitHub.
-- Đóng gói: `packaging/XoaChuTruyenTranh.spec` (onedir), `.github/workflows/dong-goi.yml` (windows-latest, torch CPU, chạy tự kiểm tra đầy đủ, nén 7z, đính kèm khi có tag `v*`).
-- Khung chia sẻ: `LICENSE` (GPL-3.0), `THIRD-PARTY.md`, `HUONG-DAN.md`, `packaging/DOC-TRUOC.txt`, `Noi Git.bat`, `Day len GitHub.bat`, `.gitignore` chặn ảnh truyện và mô hình, `.gitattributes`.
+- `src/duong_dan.py`: Mac dùng `~/Library/Application Support/XoaChuTruyenTranh`.
+- `packaging/XoaChuTruyenTranh.spec`: thêm BUNDLE (.app) khi build trên Mac + runtime hook `packaging/rthook_cv2_mac.py`.
+- Workflow: job `windows` + job `mac` (macos-latest), mỗi job tự đính kèm zip của mình vào release; mô tả release ở `packaging/MO-TA-BAN-PHAT-HANH.md`; Mac nén bằng `ditto` (giữ symlink trong .app).
+- `packaging/requirements-dong-goi.txt`: khóa OpenCV < 5.
+- Hướng dẫn Mac: `HUONG-DAN.md` mục 1b, `packaging/DOC-TRUOC-MAC.txt`, README.
 
 ## Đang làm dở
-- Bản đóng gói chưa được mở bằng tay trên Windows thật có màn hình (Actions chỉ chạy tự kiểm tra không cửa sổ).
+- Bản Mac chưa được mở bằng tay trên Mac thật (chờ bạn của em thử); chưa biết cách Gatekeeper trên máy bạn hiển thị (Open Anyway hay báo "damaged").
 - Ảnh tiếng Trung vẫn chưa chạy trên máy em (việc cũ).
 
 ## Việc kế tiếp (tối đa 3)
-1. Nếu Actions đỏ ở lần sau, đọc log bước "Chay thu ban dong goi" (in nội dung `nhat-ky-loi.txt`).
-2. Ghi phản hồi của bạn đầu tiên (máy sạch): cài được không, thời gian chạy, lỗi (nếu có) vào `validation\`.
-3. Theo phản hồi của các bạn; cân nhắc bỏ torch (LaMa ONNX) nếu zip quá nặng.
+1. Em tạo release `v0.1.1`; kiểm tra trang release có đủ 2 file zip.
+2. Ghi phản hồi của bạn dùng Mac M1 (mở được không, bước Gatekeeper nào, thời gian chạy) vào `validation\`; nếu Gatekeeper chặn khó, cân nhắc hướng dẫn `xattr -cr` lên trước.
+3. Theo phản hồi; cân nhắc bỏ torch (LaMa ONNX) nếu zip quá nặng.
 
 ## Đang chờ em quyết
 - Có dùng Notion cho dự án này không (chưa có trang).
@@ -34,8 +35,10 @@ Dự án đã lên GitHub (repo công khai) và GitHub tự đóng gói app thà
 - Bản đóng gói `console=False`: `print` không hiện; lỗi tự kiểm tra ghi vào `nhat-ky-loi.txt`. Hộp thoại lỗi không được bật trong chế độ tự kiểm tra (offscreen sẽ treo).
 - `ctd_seg.onnx` yêu cầu đầu vào chia hết cho 64; tạo ra phải đúng 65 568 531 byte (khớp bản trên máy em).
 - Kích thước mô hình dùng để kiểm: comictextdetector 94 669 756 byte, big-lama 205 669 692 byte. Nếu nguồn tải đổi file, app sẽ báo "tải không đủ".
+- Mac: KHÔNG tự dựng .app và KHÔNG chép `_internal` nguyên khối vào `Contents/Frameworks` (đã thử 2026-11-20: bootloader cần Frameworks, codesign từ chối thư mục `*.dist-info`/file dữ liệu ở đó). Dùng BUNDLE + runtime hook cv2. Biến `XOA_CV2_NAP_THANG=1` bật hook trên Linux/Windows để thử.
+- GitHub không còn máy `macos-14`; dùng `macos-latest`.
 - Torch PyPI trên Linux kèm CUDA (gói thử trên máy Claude 5,2 GB); Windows dùng index CPU: zip 261 MB, giải nén 752 MB (run 44558433135, 2026-11-19). Actions chạy ~5 phút.
 - Số "2" (số chương, Hàn) bị xóa dở khi chạy tự động: giữ bằng khoanh + Khôi phục. Khôi phục dùng ảnh gốc theo đường dẫn: gỡ/đổi tên ảnh gốc làm hỏng khôi phục.
 
 ## File cần đọc trước
-`RULES.md`, `src/duong_dan.py`, `src/tai_mo_hinh.py`, `src/app.py` (`ensure_models`, `tu_kiem_tra`), `.github/workflows/dong-goi.yml`
+`RULES.md`, `src/duong_dan.py`, `src/tai_mo_hinh.py`, `src/app.py` (`ensure_models`, `tu_kiem_tra`), `.github/workflows/dong-goi.yml`, `packaging/XoaChuTruyenTranh.spec`, `packaging/rthook_cv2_mac.py`
